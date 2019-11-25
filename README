@@ -1,0 +1,99 @@
+ _____       _     _     ______ _____  ________  ___
+/  __ \     | |   (_)    |  _  \  _  ||  _  |  \/  |
+| /  \/_   _| |__  _  ___| | | | | | || | | | .  . |
+| |   | | | | '_ \| |/ __| | | | | | || | | | |\/| |
+| \__/\ |_| | |_) | | (__| |/ /\ \_/ /\ \_/ / |  | |
+ \____/\__,_|_.__/|_|\___|___/  \___/  \___/\_|  |_/
+
+CubicDoom, a ray-casting game that fits in a boot sector (510 bytes)
+by Oscar Toledo G. Nov/25/2019
+
+http://nanochess.org
+https://github.com/nanochess/cubicDoom
+
+It's compatible with 8088 (the original IBM PC)
+
+If you want to assemble it, you must download the Netwide Assembler
+(nasm) from www.nasm.us
+
+Use this command line:
+
+  nasm -f bin doom.asm -l doom.lst -o doom.img
+  nasm -f bin doom.asm -Dcom_file=1 -o doom.com
+
+
+>> HOW TO PLAY <<
+
+This is the CubicDoom, all the cubes have rebelled against
+humankind! You need to stop the invasion!
+
+Use Left Ctrl to turn to left, use Left Alt to turn to right.
+Press Left Shift to advance, and Right Shift to shoot.
+
+Destroy all cubes on the current maze to advance to the
+next one. Careful! The cubes will advance towards you.
+
+Enjoy it!
+
+
+>> HISTORY <<
+
+I've coded CubicDoom along five days. It's a ray-casting
+engine over a 16x16 maze.
+
+I always liked ray-casting engines, it was a way to get a
+fast 3D-world on old machines.
+
+I had to simplify this one greatly, for example, at least
+two rays have to be calculated in order to see if a
+horizontal or vertical wall has been hit, but I solved it
+walking the ray very slowly.
+
+Also a tan function would have calculated better the
+distance for the wall height, but I had to go without it.
+
+Finally, sprites for ray-casting games are handled in a
+list, sorted, and projected onto screen, but there wasn't
+the space. So the enemies are also walls, but moving walls
+of different color.
+
+Mature people will recognize the moving walls pattern as
+the old robots game from the 80s, where the robots move
+blindly towards the player. Although in the original robots
+game the things on the gameplay are mines.
+
+I've enjoyed greatly programming this game. I'm pretty
+curious about how so fast would go on an old PC, but I
+don't have none at the moment.
+
+
+>> ATTENTION <<        
+
+Would you like to learn 8086/8088 programming? Then you
+must get my new book Programming Boot Sector Games including
+a 8086/8088/V20 crash course!
+
+Now available from Lulu:
+
+  Soft-cover
+    http://www.lulu.com/shop/oscar-toledo-gutierrez/programming-boot-sector-games/paperback/product-24188564.html
+
+  Hard-cover
+    http://www.lulu.com/shop/oscar-toledo-gutierrez/programming-boot-sector-games/hardcover/product-24188530.html
+
+  eBook
+    https://nanochess.org/store.html
+
+These are some of the example programs documented profusely
+in the book:
+
+  * Guess the number.
+  * Tic-Tac-Toe game.
+  * Text graphics.
+  * Mandelbrot set.
+  * F-Bird game.
+  * Invaders game.
+  * Pillman game.
+  * Toledo Atomchess.
+  * bootBASIC language.
+
