@@ -21,6 +21,10 @@ Use this command line:
   nasm -f bin doom.asm -l doom.lst -o doom.img
   nasm -f bin doom.asm -Dcom_file=1 -o doom.com
 
+Play it on your browser: (v86 at parkertomatoes.github.io)
+
+  https://tinyurl.com/cubicdoom
+
 
 >> HOW TO PLAY <<
 
