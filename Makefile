@@ -6,12 +6,12 @@ src = doom.asm
 all: doom.img
 
 doom.img: $(src)
-        nasm -f bin -l doom.lst -o $@ $(src)
+	nasm -f bin -l doom.lst -o $@ $(src)
 
 .PHONY: clean
 clean:
-        $(RM) doom.img
+	$(RM) doom.img
 
 .PHONY: runqemu
 runqemu: doom.img
-        qemu-system-i386 -fda doom.img
+	qemu-system-i386 -fda doom.img

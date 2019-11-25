@@ -84,7 +84,7 @@ restart:
         mov byte [di+bx],WALL   ; Setup a wall
         call random
         mov byte [di+bx],ENEMY  ; Setup an enemy
-        add di,16       ; Go to next row of maze
+        add di,byte 16  ; Go to next row of maze
         loop .2         ; Repeat until filled
 game_loop:
         call wait_frame ; Wait a frame
@@ -109,7 +109,7 @@ game_loop:
         ;
 .22:
         mov byte [si],0x0c      ; Blood pixel
-        add si,23       ; Advance by prime number
+        add si,byte 23  ; Advance by prime number
 .23:
         je restart      ; Zero = full loop, restart game.
         jnb .22         ; Carry = one fill complete.
@@ -165,7 +165,7 @@ game_loop:
         jz .24          ; Jump if normal wall
         mov ch,32       ; Rainbow
 
-        cmp di,20
+        cmp di,byte 20
         jne .24         ; Jump if not at center
         cmp byte [bp+shot],1
         je .24          ; Jump if not shooting

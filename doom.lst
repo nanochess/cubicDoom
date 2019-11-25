@@ -80,22 +80,22 @@
     80 0000003A BF22FF                          mov di,maze+34  ; Point to center of maze
     81 0000003D B20C                            mov dl,12       ; Modulo 12 for random number
     82                                  .2:
-    83 0000003F E87B01                          call random
+    83 0000003F E87C01                          call random
     84 00000042 C60180                          mov byte [di+bx],WALL   ; Setup a wall
-    85 00000045 E87501                          call random
+    85 00000045 E87601                          call random
     86 00000048 C601C0                          mov byte [di+bx],ENEMY  ; Setup an enemy
-    87 0000004B 83C710                          add di,16       ; Go to next row of maze
+    87 0000004B 83C710                          add di,byte 16  ; Go to next row of maze
     88 0000004E E2EF                            loop .2         ; Repeat until filled
     89                                  game_loop:
-    90 00000050 E87D01                          call wait_frame ; Wait a frame
+    90 00000050 E87E01                          call wait_frame ; Wait a frame
     91                                  
     92 00000053 80E21F                          and dl,31       ; 32 frames have passed?
     93 00000056 7555                            jnz .16         ; No, jump
     94                                          ;
     95                                          ; Move cubes
     96                                          ;
-    97 00000058 E80F01                          call get_dir    ; Get player position, also SI=0
-    98 0000005B E84401                          call get_pos    ; Convert position to maze address
+    97 00000058 E81001                          call get_dir    ; Get player position, also SI=0
+    98 0000005B E84501                          call get_pos    ; Convert position to maze address
     99 0000005E 89D9                            mov cx,bx       ; Save into CX
    100                                  
    101 00000060 B300                            mov bl,0        ; BH already ready, start at corner
@@ -109,12 +109,12 @@
    109                                          ;
    110                                  .22:
    111 0000006B C6040C                          mov byte [si],0x0c      ; Blood pixel
-   112 0000006E 83C617                          add si,23       ; Advance by prime number
+   112 0000006E 83C617                          add si,byte 23  ; Advance by prime number
    113                                  .23:
    114 00000071 7499                            je restart      ; Zero = full loop, restart game.
    115 00000073 73F6                            jnb .22         ; Carry = one fill complete.
    116 00000075 56                              push si
-   117 00000076 E85701                          call wait_frame ; Wait a frame (for fast machines)
+   117 00000076 E85801                          call wait_frame ; Wait a frame (for fast machines)
    118 00000079 5E                              pop si
    119 0000007A EBEF                            jmp .22         ; Continue
    120                                  
@@ -154,9 +154,9 @@
    154                                  .2:
    155 000000B0 8D45EC                          lea ax,[di-20]  ; Almost 60 degrees to left
    156 000000B3 034602                          add ax,[bp+pa]  ; Get vision angle
-   157 000000B6 E8B100                          call get_dir    ; Get position and direction
+   157 000000B6 E8B200                          call get_dir    ; Get position and direction
    158                                  .3:
-   159 000000B9 E8D500                          call read_maze  ; Verify wall hit
+   159 000000B9 E8D600                          call read_maze  ; Verify wall hit
    160 000000BC 73FB                            jnc .3          ; Continue if it was open space
    161                                  
    162                                  .4:
@@ -165,11 +165,11 @@
    165 000000C1 741F                            jz .24          ; Jump if normal wall
    166 000000C3 B520                            mov ch,32       ; Rainbow
    167                                  
-   168 000000C5 83FF14                          cmp di,20
+   168 000000C5 83FF14                          cmp di,byte 20
    169 000000C8 7518                            jne .24         ; Jump if not at center
    170 000000CA 807E0A01                        cmp byte [bp+shot],1
    171 000000CE 7412                            je .24          ; Jump if not shooting
-   172 000000D0 E8CF00                          call get_pos
+   172 000000D0 E8D000                          call get_pos
    173 000000D3 FE07                            inc byte [bx]   ; Increase cube hits
    174 000000D5 803FC3                          cmp byte [bx],ENEMY+3   ; 3 hits?
    175 000000D8 7508                            jne .24         ; No, jump
@@ -178,7 +178,7 @@
    178 000000E0 748F                            je .23          ; Zero means to get another level
    179                                  .24:
    180 000000E2 8D450C                          lea ax,[di+12]  ; Get cos(-30) to cos(30)
-   181 000000E5 E88F00                          call get_sin    ; Get cos (8 bit fraction)
+   181 000000E5 E89000                          call get_sin    ; Get cos (8 bit fraction)
    182 000000E8 F7E6                            mul si          ; Correct wall distance to...
    183 000000EA 88E3                            mov bl,ah       ; ...avoid fishbowl effect
    184 000000EC 88D7                            mov bh,dl       ; Divide by 256
@@ -208,13 +208,13 @@
    208 00000110 56                              push si
    209 00000111 91                              xchg ax,cx
    210 00000112 8A460A                          mov al,[bp+shot]        ; Ceil color
-   211 00000115 E89800                          call fill_column
+   211 00000115 E89900                          call fill_column
    212 00000118 93                              xchg ax,bx      ; Wall color
    213 00000119 59                              pop cx
-   214 0000011A E89300                          call fill_column
+   214 0000011A E89400                          call fill_column
    215 0000011D B003                            mov al,0x03     ; Floor color (a la Wolfenstein)
    216 0000011F 59                              pop cx
-   217 00000120 E88D00                          call fill_column
+   217 00000120 E88E00                          call fill_column
    218 00000123 5F                              pop di
    219 00000124 4F                              dec di          ; Decrease column
    220 00000125 7989                            jns .2          ; Completed? No, jump.
@@ -245,117 +245,117 @@
    245 0000014C 895E02                          mov [bp+pa],bx  ; Update angle
    246                                  
    247 0000014F A802                            test al,0x02    ; Left shift pressed?
-   248 00000151 7414                            je .10
+   248 00000151 7415                            je .10
    249 00000153 93                              xchg ax,bx      ; Put angle into AX
-   250 00000154 E81300                          call get_dir    ; Get position and direction
-   251 00000157 E83700                  .5:     call read_maze  ; Move and check for wall hit
-   252 0000015A 720B                            jc .10          ; Hit, jump without updating position.
-   253 0000015C 83FE04                          cmp si,4        ; Four times (the speed)
-   254 0000015F 75F6                            jne .5
+   250 00000154 E81400                          call get_dir    ; Get position and direction
+   251 00000157 E83800                  .5:     call read_maze  ; Move and check for wall hit
+   252 0000015A 720C                            jc .10          ; Hit, jump without updating position.
+   253 0000015C 81FE0400                        cmp si,4        ; Four times (the speed)
+   254 00000160 75F5                            jne .5
    255                                  
-   256 00000161 895606                          mov [bp+px],dx  ; Update X position
-   257 00000164 895E04                          mov [bp+py],bx  ; Update Y position
+   256 00000162 895606                          mov [bp+px],dx  ; Update X position
+   257 00000165 895E04                          mov [bp+py],bx  ; Update Y position
    258                                  .10:
-   259 00000167 E9E6FE                          jmp game_loop   ; Repeat game loop
+   259 00000168 E9E5FE                          jmp game_loop   ; Repeat game loop
    260                                  
    261                                          ;
    262                                          ; Get a direction vector
    263                                          ;
    264                                  get_dir:
-   265 0000016A 31F6                            xor si,si       ; Wall distance = 0
-   266 0000016C 8B5606                          mov dx,[bp+px]  ; Get X position
-   267 0000016F 50                              push ax
-   268 00000170 E80400                          call get_sin    ; Get sine
-   269 00000173 91                              xchg ax,cx      ; Onto DX
-   270 00000174 58                              pop ax
-   271 00000175 0420                            add al,32       ; Add 90 degrees to get cosine
+   265 0000016B 31F6                            xor si,si       ; Wall distance = 0
+   266 0000016D 8B5606                          mov dx,[bp+px]  ; Get X position
+   267 00000170 50                              push ax
+   268 00000171 E80400                          call get_sin    ; Get sine
+   269 00000174 91                              xchg ax,cx      ; Onto DX
+   270 00000175 58                              pop ax
+   271 00000176 0420                            add al,32       ; Add 90 degrees to get cosine
    272                                          ;
    273                                          ; Get sine
    274                                          ;
    275                                  get_sin:
-   276 00000177 A840                            test al,64      ; Angle >= 180 degrees?
-   277 00000179 9C                              pushf
-   278 0000017A A820                            test al,32      ; Angle 90-179 or 270-359 degrees?
-   279 0000017C 7402                            je .2
-   280 0000017E 341F                            xor al,31       ; Invert bits (reduces table)
+   276 00000178 A840                            test al,64      ; Angle >= 180 degrees?
+   277 0000017A 9C                              pushf
+   278 0000017B A820                            test al,32      ; Angle 90-179 or 270-359 degrees?
+   279 0000017D 7402                            je .2
+   280 0000017F 341F                            xor al,31       ; Invert bits (reduces table)
    281                                  .2:
-   282 00000180 83E01F                          and ax,31       ; Only 90 degrees in table
-   283 00000183 BB[DD01]                        mov bx,sin_table
-   284 00000186 2ED7                            cs xlat         ; Get fraction
-   285 00000188 9D                              popf
-   286 00000189 7402                            je .1           ; Jump if angle less than 180
-   287 0000018B F7D8                            neg ax          ; Else negate result
+   282 00000181 251F00                          and ax,31       ; Only 90 degrees in table
+   283 00000184 BB[DE01]                        mov bx,sin_table
+   284 00000187 2ED7                            cs xlat         ; Get fraction
+   285 00000189 9D                              popf
+   286 0000018A 7402                            je .1           ; Jump if angle less than 180
+   287 0000018C F7D8                            neg ax          ; Else negate result
    288                                  .1:
-   289 0000018D 8B5E04                          mov bx,[bp+py]  ; Get Y position
-   290 00000190 C3                              ret
+   289 0000018E 8B5E04                          mov bx,[bp+py]  ; Get Y position
+   290 00000191 C3                              ret
    291                                  
    292                                          ;
    293                                          ; Read maze
    294                                          ;
    295                                  read_maze:
-   296 00000191 46                              inc si          ; Count distance to wall
-   297 00000192 01CA                            add dx,cx       ; Move X
-   298 00000194 01C3                            add bx,ax       ; Move Y
-   299 00000196 53                              push bx
-   300 00000197 51                              push cx
-   301 00000198 E80700                          call get_pos
-   302 0000019B 8A1F                            mov bl,[bx]     ; Read maze byte
-   303 0000019D D0E3                            shl bl,1        ; Carry = 1 = wall, Zero = Wall 0 / 1
-   304 0000019F 59                              pop cx
-   305 000001A0 5B                              pop bx
-   306 000001A1 C3                              ret             ; Return
+   296 00000192 46                              inc si          ; Count distance to wall
+   297 00000193 01CA                            add dx,cx       ; Move X
+   298 00000195 01C3                            add bx,ax       ; Move Y
+   299 00000197 53                              push bx
+   300 00000198 51                              push cx
+   301 00000199 E80700                          call get_pos
+   302 0000019C 8A1F                            mov bl,[bx]     ; Read maze byte
+   303 0000019E D0E3                            shl bl,1        ; Carry = 1 = wall, Zero = Wall 0 / 1
+   304 000001A0 59                              pop cx
+   305 000001A1 5B                              pop bx
+   306 000001A2 C3                              ret             ; Return
    307                                  
    308                                          ;
    309                                          ; Convert coordinates to position
    310                                          ;
    311                                  get_pos:        
-   312 000001A2 88F3                            mov bl,dh       ; X-coordinate 
-   313 000001A4 B104                            mov cl,0x04     ; Divide by 4096
-   314 000001A6 D2EB                            shr bl,cl
-   315 000001A8 80E7F0                          and bh,0xf0     ; Y-coordinate / 4096 * 16
-   316 000001AB 08FB                            or bl,bh        ; Translate to maze array
-   317 000001AD B7FF                            mov bh,maze>>8
-   318 000001AF C3                              ret
+   312 000001A3 88F3                            mov bl,dh       ; X-coordinate 
+   313 000001A5 B104                            mov cl,0x04     ; Divide by 4096
+   314 000001A7 D2EB                            shr bl,cl
+   315 000001A9 80E7F0                          and bh,0xf0     ; Y-coordinate / 4096 * 16
+   316 000001AC 08FB                            or bl,bh        ; Translate to maze array
+   317 000001AE B7FF                            mov bh,maze>>8
+   318 000001B0 C3                              ret
    319                                  
    320                                          ;
    321                                          ; Fill a screen column
    322                                          ;
    323                                  fill_column:
-   324 000001B0 88C4                            mov ah,al       ; Duplicate pixel value
+   324 000001B1 88C4                            mov ah,al       ; Duplicate pixel value
    325                                  .1:
-   326 000001B2 AB                              stosw           ; Draw 2 pixels
-   327 000001B3 AB                              stosw           ; Draw 2 pixels
-   328 000001B4 AB                              stosw           ; Draw 2 pixels
-   329 000001B5 AB                              stosw           ; Draw 2 pixels
-   330 000001B6 81C73801                        add di,0x0138   ; Go to next row
-   331 000001BA E2F6                            loop .1         ; Repeat until fully drawn
-   332 000001BC C3                              ret             ; Return
+   326 000001B3 AB                              stosw           ; Draw 2 pixels
+   327 000001B4 AB                              stosw           ; Draw 2 pixels
+   328 000001B5 AB                              stosw           ; Draw 2 pixels
+   329 000001B6 AB                              stosw           ; Draw 2 pixels
+   330 000001B7 81C73801                        add di,0x0138   ; Go to next row
+   331 000001BB E2F6                            loop .1         ; Repeat until fully drawn
+   332 000001BD C3                              ret             ; Return
    333                                  
    334                                          ;
    335                                          ; Generate a pseudo-random number (from bootRogue)
    336                                          ;
    337                                  random:
-   338 000001BD B0FB                            mov al,251
-   339 000001BF F66608                          mul byte [bp+rnd]
-   340 000001C2 0453                            add al,83
-   341 000001C4 884608                          mov [bp+rnd],al
-   342 000001C7 B400                            mov ah,0
-   343 000001C9 F6F2                            div dl
-   344 000001CB 88E3                            mov bl,ah
-   345 000001CD B700                            mov bh,0
-   346 000001CF C3                              ret
+   338 000001BE B0FB                            mov al,251
+   339 000001C0 F66608                          mul byte [bp+rnd]
+   340 000001C3 0453                            add al,83
+   341 000001C5 884608                          mov [bp+rnd],al
+   342 000001C8 B400                            mov ah,0
+   343 000001CA F6F2                            div dl
+   344 000001CC 88E3                            mov bl,ah
+   345 000001CE B700                            mov bh,0
+   346 000001D0 C3                              ret
    347                                  
    348                                          ;
    349                                          ; Wait a frame (18.2 hz)
    350                                          ;
    351                                  wait_frame:
    352                                  .1:
-   353 000001D0 B400                            mov ah,0x00     ; Get ticks
-   354 000001D2 CD1A                            int 0x1a        ; Call BIOS time service
-   355 000001D4 3B5600                          cmp dx,[bp+oldtim]   ; Same as old time?
-   356 000001D7 74F7                            je .1           ; Yes, wait.
-   357 000001D9 895600                          mov [bp+oldtim],dx
-   358 000001DC C3                              ret
+   353 000001D1 B400                            mov ah,0x00     ; Get ticks
+   354 000001D3 CD1A                            int 0x1a        ; Call BIOS time service
+   355 000001D5 3B5600                          cmp dx,[bp+oldtim]   ; Same as old time?
+   356 000001D8 74F7                            je .1           ; Yes, wait.
+   357 000001DA 895600                          mov [bp+oldtim],dx
+   358 000001DD C3                              ret
    359                                  
    360                                          ;
    361                                          ; Sine table (0.8 format)
@@ -363,14 +363,14 @@
    363                                          ; 32 bytes are 90 degrees.
    364                                          ;
    365                                  sin_table:
-   366 000001DD 00091624313E4753        	db 0x00,0x09,0x16,0x24,0x31,0x3e,0x47,0x53
-   367 000001E5 606C78808B96A1AB        	db 0x60,0x6c,0x78,0x80,0x8b,0x96,0xa1,0xab
-   368 000001ED B5BBC4CCD4DBE0E6        	db 0xb5,0xbb,0xc4,0xcc,0xd4,0xdb,0xe0,0xe6
-   369 000001F5 ECF1F5F7FAFDFFFF                db 0xec,0xf1,0xf5,0xf7,0xfa,0xfd,0xff,0xff
+   366 000001DE 00091624313E4753        	db 0x00,0x09,0x16,0x24,0x31,0x3e,0x47,0x53
+   367 000001E6 606C78808B96A1AB        	db 0x60,0x6c,0x78,0x80,0x8b,0x96,0xa1,0xab
+   368 000001EE B5BBC4CCD4DBE0E6        	db 0xb5,0xbb,0xc4,0xcc,0xd4,0xdb,0xe0,0xe6
+   369 000001F6 ECF1F5F7FAFDFFFF                db 0xec,0xf1,0xf5,0xf7,0xfa,0xfd,0xff,0xff
    370                                  
    371                                      %ifdef com_file
    372                                      %else
-   373 000001FD 4F                      	times 510-($-$$) db 0x4f
+   373                                  	times 510-($-$$) db 0x4f
    374 000001FE 55AA                    	db 0x55,0xaa           ; Make it a bootable sector
    375                                      %endif
    376                                  
