@@ -9,6 +9,8 @@
         ; Revision date: Nov/24/2019. Builds a world. Added evil cubes, and
         ;                             can shoot them. 517 bytes.
         ; Revision date: Nov/25/2019. Optimized last bytes. 509 bytes.
+        ; Revision date: Nov/26/2019. Smaller extract. 508 bytes
+        ;                             (Peter Ferrie).
         ;
 
         ;
@@ -124,7 +126,7 @@ game_loop:
         mov ah,cl
         mov dx,0x0f0f   ; Extract columns
         and dx,ax
-        and ax,0xf0f0   ; Extract rows
+        xor ax,dx       ; Extract rows
         cmp ah,al       ; Same row?
         je .19          ; Yes, jump
         lea di,[bx+0x10]        ; Cube moves down
