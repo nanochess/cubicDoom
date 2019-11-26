@@ -252,7 +252,7 @@ game_loop:
         call get_dir    ; Get position and direction
 .5:     call read_maze  ; Move and check for wall hit
         jc .10          ; Hit, jump without updating position.
-        cmp si,4        ; Four times (the speed)
+        cmp si,byte 4   ; Four times (the speed)
         jne .5
 
         mov [bp+px],dx  ; Update X position
