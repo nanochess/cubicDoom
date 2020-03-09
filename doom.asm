@@ -154,7 +154,7 @@ game_loop:
         ;
         mov di,39       ; Column number is 39
 .2:
-        lea ax,[di-20]  ; Almost 60 degrees to left
+        lea ax,[di-20]  ; Almost 60 degrees to the left
         add ax,[bp+pa]  ; Get vision angle
         call get_dir    ; Get position and direction
 .3:
@@ -209,7 +209,7 @@ game_loop:
         push ax
         push si
         xchg ax,cx
-        mov al,[bp+shot]        ; Ceil color
+        mov al,[bp+shot]        ; Ceiling color
         call fill_column
         xchg ax,bx      ; Wall color
         pop cx
